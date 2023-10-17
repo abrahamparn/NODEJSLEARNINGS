@@ -11,7 +11,7 @@ const listOfFriends = [
     },
     {
         id:1,
-        name: "Sir Newtwon"
+        name: "Sir Newtwoon"
     },
     {
         id:2,
@@ -19,6 +19,29 @@ const listOfFriends = [
     }
 ]
 
+app.use((req, res, next)=>{
+    const start = Date.now()
+    next()
+    const end = Date.now() - start
+    console.log(`${req.method} and ${req.url} and ${end}ms`)
+
+})
+app.use(express.json())
+
+app.post('/friends', (req, res)=>{
+    if(!req.body.name ){
+       return res.status(400).json({
+            error: "Data is not correct"
+        })
+    }
+    const newFriend = {
+
+        name: req.body.name,
+        id: listOfFriends.length
+    }
+    listOfFriends.push(newFriend)
+    res.json(newFriend)
+})
 app.get('/listOfFriends', (req, res) => {
     res.json(listOfFriends)
 })
