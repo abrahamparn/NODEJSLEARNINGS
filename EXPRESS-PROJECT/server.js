@@ -1,29 +1,26 @@
 const express = require('express')
-const friendsController = require('./controllers/friends.controller')
-const messagesController = require('./controllers/messages.controllers')
-const listOfFriendsController = require("./controllers/listOfFriends.controller")
+// Importing routers
+const friendsRouter = require('./router/friends.router')
+const messagesRouter = require('./router/messages.router')
+const listOfFriendsRouter = require('./router/listOfFriends.router')
 const app = express();
-
 const PORT = 3000;
 
 app.use((req, res, next)=>{
     const start = Date.now()
     next()
     const end = Date.now() - start
-    console.log(`${req.method} and ${req.url} and ${end}ms`)
+    console.log(`${req.method} and ${req.baseUrl}${req.url} and ${end}ms`)
 
 })
 app.use(express.json())
 
-app.get('/friends', friendsController.getFreinds)
-app.post('/friends', friendsController.postFriends)
+// Friends route using express routing and mounting it
+app.use('/friends', friendsRouter)
 
-app.get('/listOfFriends', listOfFriendsController.getListOfFriends)
-app.get('/listOfFriends/:friendId', listOfFriendsController.getListOfFriendsId)
+app.use('/listOfFriends', listOfFriendsRouter)
 
-app.get('/messages', messagesController.getMessages);
-app.post('/messages', messagesController.postMessages);
-
+app.use('/messages', messagesRouter)
 
 
 app.listen(PORT, () => {
